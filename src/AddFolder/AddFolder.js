@@ -32,6 +32,7 @@ export default class AddFolder extends React.Component {
     };
     const postOption = {
       method: "POST",
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(newFolderObj),
     };
 
@@ -45,7 +46,7 @@ export default class AddFolder extends React.Component {
       .then((data) => {
         const newFolderWithId = {
           id: `${data.id}-ffaf-11e8-8eb2-f2801f1b9fd1`,
-          ...newFolderObj,
+          name: data.name,
         };
         console.log("the post request works?? ", newFolderWithId);
         this.setState({
@@ -70,15 +71,14 @@ export default class AddFolder extends React.Component {
   }
 
   render() {
-    // console.log("this is contextType: ", this.context);
     return (
       <form onSubmit={(e) => this.handleSubmit(e)}>
         <fieldset>
-          <label htmlFor="folder">New Folder Name</label>
+          <label htmlFor="addfolder">New Folder Name</label>
           <input
             type="text"
-            name="folder"
-            id="folder"
+            name="addfolder"
+            id="addfolder"
             ref={this.nameInput}
             value={this.state.folder.value}
             onChange={(e) => this.updateFolder(e.target.value)}
