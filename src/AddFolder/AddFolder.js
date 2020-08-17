@@ -71,6 +71,7 @@ export default class AddFolder extends React.Component {
   }
 
   render() {
+    console.log(ApiContext);
     return (
       <form onSubmit={(e) => this.handleSubmit(e)}>
         <fieldset>

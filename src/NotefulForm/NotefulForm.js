@@ -3,7 +3,7 @@ import "./NotefulForm.css";
 
 export default function NotefulForm(props) {
   const { className, ...otherProps } = props;
-  console.log(props);
+
   return (
     <form
       className={["Noteful-form", className].join(" ")}
@@ -12,3 +12,7 @@ export default function NotefulForm(props) {
     />
   );
 }
+
+NotefulForm.propTypes = {
+  className: PropTypes.string,
+};

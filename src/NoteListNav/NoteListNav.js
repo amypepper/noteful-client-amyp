@@ -52,3 +52,11 @@ export default class NoteListNav extends React.Component {
     );
   }
 }
+
+NoteListMain.propTypes = {
+  folders: PropTypes.array,
+};
+
+NoteListNav.defaultProps = {
+  folders: [],
+};
