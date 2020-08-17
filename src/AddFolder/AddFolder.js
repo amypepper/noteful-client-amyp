@@ -1,58 +1,105 @@
-import React, { Component } from "react";
-import NotefulForm from "../NotefulForm/NotefulForm";
+import React from "react";
+
 import ApiContext from "../ApiContext";
 import config from "../config";
-import "./AddFolder.css";
+import ValidationError from "../ValidationError";
 
-export default class AddFolder extends Component {
-  static defaultProps = {
-    history: {
-      push: () => {},
-    },
-  };
+export default class AddFolder extends React.Component {
   static contextType = ApiContext;
+
+  constructor(props) {
+    super(props);
+    this.nameInput = React.createRef();
+    this.state = {
+      folder: {
+        value: "",
+        touched: false,
+      },
+    };
+  }
+
+  updateFolder(folderName) {
+    this.setState({
+      folder: { value: folderName, touched: true },
+    });
+  }
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const folder = {
-      name: e.target["folder-name"].value,
+    const { folder } = this.state;
+    const newFolderObj = {
+      name: folder.value,
     };
-    fetch(`${config.API_ENDPOINT}/folders`, {
+    const postOption = {
       method: "POST",
-      headers: {
-        "content-type": "application/json",
-      },
-      body: JSON.stringify(folder),
-    })
+      body: JSON.stringify(newFolderObj),
+    };
+
+    fetch(`${config.API_ENDPOINT}/folders`, postOption)
       .then((res) => {
         if (!res.ok) {
-          return res.json().then((e) => Promise.reject(e));
+          throw new Error("Something went wrong, please try again later");
         }
         return res.json();
       })
-      .then((folder) => {
-        this.context.addFolder(folder);
-        this.props.history.push(`/folder/${folder.id}`);
+      .then((data) => {
+        const newFolderWithId = {
+          id: `${data.id}-ffaf-11e8-8eb2-f2801f1b9fd1`,
+          ...newFolderObj,
+        };
+        console.log("the post request works?? ", newFolderWithId);
+        this.setState({
+          folder: { value: "", touched: false },
+        });
+        this.context.AddFolder(newFolderWithId);
       })
-      .catch((error) => {
-        console.error({ error });
+      .catch((err) => {
+        this.setState({
+          error: err.message,
+        });
       });
   };
 
+  validateFolderName() {
+    const folderName = this.state.folder.value.trim();
+    if (folderName.length === 0) {
+      return "Name is required";
+    } else if (folderName.length < 3) {
+      return "Name must be at least 3 characters long";
+    }
+  }
+
   render() {
+    console.log(ApiContext);
     return (
-      <section className="AddFolder">
-        <h2>Create a folder</h2>
-        <NotefulForm onSubmit={this.handleSubmit}>
-          <div className="field">
-            <label htmlFor="folder-name-input">Name</label>
-            <input type="text" id="folder-name-input" name="folder-name" />
-          </div>
-          <div className="buttons">
-            <button type="submit">Add folder</button>
-          </div>
-        </NotefulForm>
-      </section>
+      <form onSubmit={(e) => this.handleSubmit(e)}>
+        <fieldset>
+          <label htmlFor="folder">New Folder Name</label>
+          <input
+            type="text"
+            name="folder"
+            id="folder"
+            ref={this.nameInput}
+            value={this.state.folder.value}
+            onChange={(e) => this.updateFolder(e.target.value)}
+          />
+          {this.state.folder.touched && (
+            <ValidationError message={this.validateFolderName()} />
+          )}
+        </fieldset>
+        <fieldset className="button__group">
+          <button type="reset" className="button">
+            Cancel
+          </button>
+          <button
+            type="submit"
+            className="button"
+            disabled={this.validateFolderName()}
+          >
+            Save
+          </button>
+        </fieldset>
+      </form>
     );
   }
 }
