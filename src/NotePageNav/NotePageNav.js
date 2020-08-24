@@ -4,7 +4,7 @@ export default function NotePageNav(props) {
   return (
     <>
       <button>Go back</button>
-      <div>Folder: {props.selected.folder.name}</div>
+      <div>{props.selected.folder.name}</div>
     </>
   );
 }

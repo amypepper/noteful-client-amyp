@@ -10,7 +10,7 @@ import "./App.css";
 
 class App extends Component {
   state = {
-    noteView: false,
+    noteView: true,
     folders: [],
     notes: [],
     selected: {
@@ -39,7 +39,7 @@ class App extends Component {
           {this.state.noteView ? (
             <NotePageNav {...this.state} />
           ) : (
-            <NoteListNav />
+            <Route exact path="/" component={NoteListNav} />
           )}
         </nav>
         <main>
@@ -48,7 +48,6 @@ class App extends Component {
           ) : (
             <NoteListMain />
           )}
-          <button>Add note</button>
         </main>
       </div>
     );
