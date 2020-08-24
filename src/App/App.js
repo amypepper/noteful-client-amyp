@@ -1,6 +1,10 @@
 import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
-import data from "../dummy-store";
+
+import NoteListMain from "../NoteListMain/NoteListMain";
+import NoteListNav from "../NoteListNav/NoteListNav";
+import NotePageMain from "../NotePageMain/NotePageMain";
+import NotePageNav from "../NotePageNav/NotePageNav";
 
 import "./App.css";
 
@@ -33,40 +37,16 @@ class App extends Component {
         </header>
         <nav>
           {this.state.noteView ? (
-            <div>
-              <button>Go back</button>
-              <p>Folder: {this.state.selected.folder.name}</p>
-            </div>
+            <NotePageNav {...this.state} />
           ) : (
-            <ul>
-              {data["folders"].map((folder) => (
-                <li>{folder.name}</li>
-              ))}
-              <button>Add folder</button>
-            </ul>
+            <NoteListNav />
           )}
         </nav>
         <main>
           {this.state.noteView ? (
-            <>
-              <section>
-                <h2>{this.state.selected.note.name}</h2>
-                <p>{this.state.selected.note.modified}</p>
-                <button>Delete Note</button>
-              </section>
-              <section>
-                <p>{this.state.selected.note.content}</p>
-              </section>
-            </>
+            <NotePageMain {...this.state} />
           ) : (
-            <ul>
-              {data["notes"].map((note) => (
-                <>
-                  <li>{note.name}</li>
-                  <button>Delete Note</button>
-                </>
-              ))}
-            </ul>
+            <NoteListMain />
           )}
           <button>Add note</button>
         </main>
