@@ -1,13 +1,13 @@
 import React from "react";
 import data from "../dummy-store";
+import NoteDetails from "../NoteDetails/NoteDetails";
 
-export default function NoteListMain() {
+export default function NoteListMain(props) {
   return (
     <ul>
-      {data["notes"].map((note) => (
+      {data["notes"].map((note, i) => (
         <li>
-          <h3>{note.name}</h3>
-          <button>Delete Note</button>
+          <NoteDetails note={note} key={i} />
         </li>
       ))}
     </ul>
