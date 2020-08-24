@@ -1,6 +1,7 @@
 import React from "react";
 import data from "../dummy-store";
 import NoteDetails from "../NoteDetails/NoteDetails";
+import CircleButton from "../CircleButton/CircleButton";
 
 export default function NoteListMain(props) {
   return (
@@ -10,6 +11,7 @@ export default function NoteListMain(props) {
           <NoteDetails note={note} key={i} />
         </li>
       ))}
+      <button>Add Note</button>
     </ul>
   );
 }
