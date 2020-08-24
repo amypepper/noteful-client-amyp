@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
-
+import data from "../dummy-store";
 import NoteListMain from "../NoteListMain/NoteListMain";
 import NoteListNav from "../NoteListNav/NoteListNav";
 import NotePageMain from "../NotePageMain/NotePageMain";
@@ -10,7 +10,6 @@ import "./App.css";
 
 class App extends Component {
   state = {
-    noteView: true,
     folders: [],
     notes: [],
     selected: {
@@ -29,6 +28,10 @@ class App extends Component {
     },
   };
 
+  filterFolders = () => {
+    data["folders"].filter((id) => id === this.state.selected.folder.id);
+  };
+
   render() {
     return (
       <div className="App">
@@ -36,18 +39,26 @@ class App extends Component {
           <h1>Noteful</h1>
         </header>
         <nav>
-          {this.state.noteView ? (
-            <NotePageNav {...this.state} />
-          ) : (
-            <Route exact path="/" component={NoteListNav} />
-          )}
+          <Route exact path="/" component={NoteListNav} />
         </nav>
+        <Route
+          path="/note/:noteid"
+          render={() => <NotePageNav {...this.state} />}
+        />
+        <Route
+          path="/folder/:folderid"
+          render={() => <NoteListNav filterFolders={this.filterFolders} />}
+        />
         <main>
-          {this.state.noteView ? (
-            <NotePageMain {...this.state} />
-          ) : (
-            <NoteListMain />
-          )}
+          <Route exact path="/" component={NoteListMain} />
+          <Route
+            path="/folder/:folderid"
+            render={() => <NoteListMain filterFolders={this.filterFolders} />}
+          />
+          <Route
+            path="/note/:noteid"
+            render={() => <NotePageMain {...this.state} />}
+          />
         </main>
       </div>
     );
