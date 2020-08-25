@@ -28,8 +28,12 @@ class App extends Component {
     },
   };
 
-  filterFolders = () => {
-    data["folders"].filter((id) => id === this.state.selected.folder.id);
+  filterFolders = (folderId) => {
+    return data["folders"].filter((folder) => folder["id"] === folderId);
+  };
+
+  filterNotes = (folderId) => {
+    return data["notes"].filter((note) => note["folderId"] === folderId);
   };
 
   render() {
@@ -39,7 +43,13 @@ class App extends Component {
           <h1>Noteful</h1>
         </header>
         <nav>
-          <Route exact path="/" component={NoteListNav} />
+          <Route
+            exact
+            path="/"
+            render={() => {
+              return <NoteListNav folders={data["folders"]} />;
+            }}
+          />
         </nav>
         <Route
           path="/note/:noteid"
@@ -47,17 +57,31 @@ class App extends Component {
         />
         <Route
           path="/folder/:folderid"
-          render={() => <NoteListNav filterFolders={this.filterFolders} />}
+          render={(routeProps) => {
+            const filteredFolders = this.filterFolders(
+              routeProps.match.params.folderid
+            );
+            return <NoteListNav folders={filteredFolders} />;
+          }}
         />
         <main>
-          <Route exact path="/" component={NoteListMain} />
           <Route
-            path="/folder/:folderid"
-            render={() => <NoteListMain filterFolders={this.filterFolders} />}
+            exact
+            path="/"
+            render={() => <NoteListMain notes={data["notes"]} />}
           />
           <Route
             path="/note/:noteid"
             render={() => <NotePageMain {...this.state} />}
+          />
+          <Route
+            path="/folder/:folderid"
+            render={(routeProps) => {
+              const filteredNotes = this.filterNotes(
+                routeProps.match.params.folderid
+              );
+              return <NoteListMain {...routeProps} notes={filteredNotes} />;
+            }}
           />
         </main>
       </div>

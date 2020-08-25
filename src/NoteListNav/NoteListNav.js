@@ -1,13 +1,24 @@
 import React from "react";
 import data from "../dummy-store";
 
-export default function NoteListNav() {
-  return (
-    <ul>
-      {data["folders"].map((folder) => (
-        <li>{folder.name}</li>
-      ))}
-      <button>Add folder</button>
-    </ul>
-  );
+export default class NoteListNav extends React.Component {
+  render() {
+    return (
+      <ul>
+        {this.props.folders.map((folder, i) => (
+          <li key={i}>{folder.name}</li>
+        ))}
+        <button>Add folder</button>
+      </ul>
+    );
+  }
+}
+
+{
+  /* <ul>
+        {filteredFolders.map((folder, i) => (
+          <li key={i}>{folder.name}</li>
+        ))}
+        <button>Add folder</button>
+      </ul> */
 }
