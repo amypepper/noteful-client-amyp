@@ -1,0 +1,8 @@
+ul * {
+  display: flex;
+  padding: 10px;
+  margin: 5px;
+}
+.active {
+  border: solid rgb(5, 12, 114) 2px;
+}
