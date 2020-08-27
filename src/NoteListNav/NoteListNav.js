@@ -1,24 +1,20 @@
 import React from "react";
-import data from "../dummy-store";
+import "./NoteListNav.css";
+import { NavLink } from "react-router-dom";
 
 export default class NoteListNav extends React.Component {
   render() {
     return (
-      <ul>
-        {this.props.folders.map((folder, i) => (
-          <li key={i}>{folder.name}</li>
-        ))}
+      <ul className="App__nav">
+        {this.props.folders.map((folder, i) => {
+          return (
+            <NavLink to={`/folder/${folder.id}`}>
+              <li key={i}>{folder.name}</li>
+            </NavLink>
+          );
+        })}
         <button>Add folder</button>
       </ul>
     );
   }
-}
-
-{
-  /* <ul>
-        {filteredFolders.map((folder, i) => (
-          <li key={i}>{folder.name}</li>
-        ))}
-        <button>Add folder</button>
-      </ul> */
 }
