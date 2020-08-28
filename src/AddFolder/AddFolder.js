@@ -1,22 +1,26 @@
 import React from "react";
 
-import ApiContext from "../ApiContext";
 import config from "../config";
-import ValidationError from "../ValidationError";
+// import ValidationError from "../ValidationError";
 
 export default class AddFolder extends React.Component {
-  static contextType = ApiContext;
+  // constructor(props) {
+  //   super(props)
+  //   this.nameInput = React.createRef();
+  //   this.state = {
+  //     folder: {
+  //       value: "",
+  //       touched: false,
+  //     },
+  //   };
+  // }
 
-  constructor(props) {
-    super(props);
-    this.nameInput = React.createRef();
-    this.state = {
-      folder: {
-        value: "",
-        touched: false,
-      },
-    };
-  }
+  state = {
+    folder: {
+      value: "",
+      touched: false,
+    },
+  };
 
   updateFolder(folderName) {
     this.setState({
@@ -30,12 +34,15 @@ export default class AddFolder extends React.Component {
     const newFolderObj = {
       name: folder.value,
     };
-    const postOption = {
+    const postOptions = {
       method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
       body: JSON.stringify(newFolderObj),
     };
 
-    fetch(`${config.API_ENDPOINT}/folders`, postOption)
+    fetch(`${config.API_ENDPOINT}/folders`, postOptions)
       .then((res) => {
         if (!res.ok) {
           throw new Error("Something went wrong, please try again later");
@@ -51,7 +58,7 @@ export default class AddFolder extends React.Component {
         this.setState({
           folder: { value: "", touched: false },
         });
-        this.context.AddFolder(newFolderWithId);
+        this.props.AddFolder(newFolderWithId);
       })
       .catch((err) => {
         this.setState({
@@ -70,7 +77,6 @@ export default class AddFolder extends React.Component {
   }
 
   render() {
-    console.log(ApiContext);
     return (
       <form onSubmit={(e) => this.handleSubmit(e)}>
         <fieldset>
@@ -83,9 +89,9 @@ export default class AddFolder extends React.Component {
             value={this.state.folder.value}
             onChange={(e) => this.updateFolder(e.target.value)}
           />
-          {this.state.folder.touched && (
+          {/* {this.state.folder.touched && (
             <ValidationError message={this.validateFolderName()} />
-          )}
+          )} */}
         </fieldset>
         <fieldset className="button__group">
           <button type="reset" className="button">

@@ -13,7 +13,9 @@ export default class NoteListNav extends React.Component {
             </NavLink>
           );
         })}
-        <button>Add folder</button>
+        <NavLink to="/add-folder">
+          <button>Add folder</button>
+        </NavLink>
       </ul>
     );
   }

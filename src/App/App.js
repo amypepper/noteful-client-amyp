@@ -7,6 +7,7 @@ import NotePageMain from "../NotePageMain/NotePageMain";
 import NotePageNav from "../NotePageNav/NotePageNav";
 
 import "./App.css";
+import AddFolder from "../AddFolder/AddFolder";
 
 class App extends Component {
   state = {
@@ -36,6 +37,13 @@ class App extends Component {
     return data["notes"].filter((note) => note["folderId"] === folderId);
   };
 
+  addFolder = (newFolder) => {
+    this.setState({
+      folders: { ...this.state.folders },
+      newFolder,
+    });
+  };
+
   render() {
     return (
       <div className="App">
@@ -49,7 +57,12 @@ class App extends Component {
             exact
             path="/"
             render={() => {
-              return <NoteListNav folders={data["folders"]} />;
+              return (
+                <NoteListNav
+                  addFolder={(newFolder) => this.addFolder(newFolder)}
+                  folders={data["folders"]}
+                />
+              );
             }}
           />
         </nav>
@@ -67,6 +80,7 @@ class App extends Component {
               <NoteListNav
                 {...routeProps}
                 {...this.state}
+                addFolder={(newFolder) => this.addFolder(newFolder)}
                 activeFolder={activeFolder}
                 folders={data["folders"]}
               />
@@ -94,6 +108,7 @@ class App extends Component {
               return <NoteListMain {...routeProps} notes={filteredNotes} />;
             }}
           />
+          <Route path="/add-folder" component={AddFolder} />
         </main>
       </div>
     );
