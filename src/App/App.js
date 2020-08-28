@@ -39,7 +39,7 @@ class App extends Component {
 
   render() {
     return (
-      <Context.Provider>
+      <Context.Provider value={this.state}>
         <div className="App">
           <header className="App__header">
             <Link to="/">
@@ -57,9 +57,7 @@ class App extends Component {
           </nav>
           <Route
             path="/note/:noteid"
-            render={(routeProps) => (
-              <NotePageNav {...routeProps} {...this.state} />
-            )}
+            render={(routeProps) => <NotePageNav {...routeProps} />}
           />
           <Route
             path="/folder/:folderid"
