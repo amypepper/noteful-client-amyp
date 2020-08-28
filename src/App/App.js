@@ -44,6 +44,12 @@ class App extends Component {
     });
   };
 
+  componentDidMount() {
+    fetch("http://localhost:9090")
+      .then((res) => res.json())
+      .then(console.log);
+  }
+
   render() {
     return (
       <div className="App">
