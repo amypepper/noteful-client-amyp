@@ -7,7 +7,6 @@ import NotePageMain from "../NotePageMain/NotePageMain";
 import NotePageNav from "../NotePageNav/NotePageNav";
 
 import "./App.css";
-import Context from "../Context";
 
 class App extends Component {
   state = {
@@ -39,66 +38,64 @@ class App extends Component {
 
   render() {
     return (
-      <Context.Provider>
-        <div className="App">
-          <header className="App__header">
-            <Link to="/">
-              <h1>Noteful</h1>
-            </Link>
-          </header>
-          <nav>
-            <Route
-              exact
-              path="/"
-              render={() => {
-                return <NoteListNav folders={data["folders"]} />;
-              }}
-            />
-          </nav>
+      <div className="App">
+        <header className="App__header">
+          <Link to="/">
+            <h1>Noteful</h1>
+          </Link>
+        </header>
+        <nav>
+          <Route
+            exact
+            path="/"
+            render={() => {
+              return <NoteListNav folders={data["folders"]} />;
+            }}
+          />
+        </nav>
+        <Route
+          path="/note/:noteid"
+          render={(routeProps) => (
+            <NotePageNav {...routeProps} {...this.state} />
+          )}
+        />
+        <Route
+          path="/folder/:folderid"
+          render={(routeProps) => {
+            const activeFolder = routeProps.match.params.folderid;
+            return (
+              <NoteListNav
+                {...routeProps}
+                {...this.state}
+                activeFolder={activeFolder}
+                folders={data["folders"]}
+              />
+            );
+          }}
+        />
+        <main className="App__main">
+          <Route
+            exact
+            path="/"
+            render={() => <NoteListMain notes={data["notes"]} />}
+          />
           <Route
             path="/note/:noteid"
             render={(routeProps) => (
-              <NotePageNav {...routeProps} {...this.state} />
+              <NotePageMain {...routeProps} {...this.state} />
             )}
           />
           <Route
             path="/folder/:folderid"
             render={(routeProps) => {
-              const activeFolder = routeProps.match.params.folderid;
-              return (
-                <NoteListNav
-                  {...routeProps}
-                  {...this.state}
-                  activeFolder={activeFolder}
-                  folders={data["folders"]}
-                />
+              const filteredNotes = this.filterNotes(
+                routeProps.match.params.folderid
               );
+              return <NoteListMain {...routeProps} notes={filteredNotes} />;
             }}
           />
-          <main className="App__main">
-            <Route
-              exact
-              path="/"
-              render={() => <NoteListMain notes={data["notes"]} />}
-            />
-            <Route
-              path="/note/:noteid"
-              render={(routeProps) => (
-                <NotePageMain {...routeProps} {...this.state} />
-              )}
-            />
-            <Route
-              path="/folder/:folderid"
-              render={(routeProps) => {
-                const filteredNotes = this.filterNotes(
-                  routeProps.match.params.folderid
-                );
-                return <NoteListMain {...routeProps} notes={filteredNotes} />;
-              }}
-            />
-          </main>
-        </div>
-      </Context.Provider>
+        </main>
+      </div>
     );
   }
 }
