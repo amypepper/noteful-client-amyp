@@ -1,39 +1,19 @@
-import React from 'react'
-import Note from '../Note/Note'
-import ApiContext from '../ApiContext'
-import { findNote } from '../notes-helpers'
-import './NotePageMain.css'
+import React from "react";
 
-export default class NotePageMain extends React.Component {
-  static defaultProps = {
-    match: {
-      params: {}
-    }
-  }
-  static contextType = ApiContext
+import NoteDetails from "../NoteDetails/NoteDetails";
 
-  handleDeleteNote = noteId => {
-    this.props.history.push(`/`)
-  }
-
-  render() {
-    const { notes=[] } = this.context
-    const { noteId } = this.props.match.params
-    const note = findNote(notes, noteId) || { content: '' }
+export default function NotePageMain(props) {
+  if (props.match.params.noteid === props.selected.note.id) {
     return (
-      <section className='NotePageMain'>
-        <Note
-          id={note.id}
-          name={note.name}
-          modified={note.modified}
-          onDeleteNote={this.handleDeleteNote}
-        />
-        <div className='NotePageMain__content'>
-          {note.content.split(/\n \r|\n/).map((para, i) =>
-            <p key={i}>{para}</p>
-          )}
-        </div>
-      </section>
-    )
+      <>
+        <section>
+          <NoteDetails note={props.selected.note} />
+        </section>
+        <section>
+          <p>{props.selected.note.content}</p>
+        </section>
+      </>
+    );
   }
+  return <div>Cannot find that Note ID</div>;
 }
