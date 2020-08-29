@@ -50,15 +50,8 @@ export default class AddFolder extends React.Component {
         return res.json();
       })
       .then((data) => {
-        const newFolderWithId = {
-          id: `${data.id}-ffaf-11e8-8eb2-f2801f1b9fd1`,
-          ...newFolderObj,
-        };
-        console.log("the post request works?? ", newFolderWithId);
-        this.setState({
-          folder: { value: "", touched: false },
-        });
-        this.props.AddFolder(newFolderWithId);
+        this.props.addFolder(data);
+        this.props.history.push("/");
       })
       .catch((err) => {
         this.setState({

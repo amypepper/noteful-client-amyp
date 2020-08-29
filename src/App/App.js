@@ -1,6 +1,5 @@
 import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
-import data from "../dummy-store";
 import NoteListMain from "../NoteListMain/NoteListMain";
 import NoteListNav from "../NoteListNav/NoteListNav";
 import NotePageMain from "../NotePageMain/NotePageMain";
@@ -30,24 +29,28 @@ class App extends Component {
   };
 
   filterFolders = (folderId) => {
-    return data["folders"].filter((folder) => folder["id"] === folderId);
+    return this.state.folders.filter((folder) => folder["id"] === folderId);
   };
 
   filterNotes = (folderId) => {
-    return data["notes"].filter((note) => note["folderId"] === folderId);
+    return this.state.notes.filter((note) => note["folderId"] === folderId);
   };
 
   addFolder = (newFolder) => {
     this.setState({
-      folders: { ...this.state.folders },
-      newFolder,
+      folders: [...this.state.folders, newFolder],
     });
   };
 
   componentDidMount() {
-    fetch("http://localhost:9090")
+    fetch("http://localhost:9090/folders")
       .then((res) => res.json())
-      .then(console.log);
+      .then((folders) => this.setState({ folders }));
+    //
+
+    fetch("http://localhost:9090/notes")
+      .then((res) => res.json())
+      .then((notes) => this.setState({ notes }));
   }
 
   render() {
@@ -66,7 +69,7 @@ class App extends Component {
               return (
                 <NoteListNav
                   addFolder={(newFolder) => this.addFolder(newFolder)}
-                  folders={data["folders"]}
+                  folders={this.state.folders}
                 />
               );
             }}
@@ -88,7 +91,7 @@ class App extends Component {
                 {...this.state}
                 addFolder={(newFolder) => this.addFolder(newFolder)}
                 activeFolder={activeFolder}
-                folders={data["folders"]}
+                folders={this.state.folders}
               />
             );
           }}
@@ -97,7 +100,7 @@ class App extends Component {
           <Route
             exact
             path="/"
-            render={() => <NoteListMain notes={data["notes"]} />}
+            render={() => <NoteListMain notes={this.state.notes} />}
           />
           <Route
             path="/note/:noteid"
@@ -114,7 +117,12 @@ class App extends Component {
               return <NoteListMain {...routeProps} notes={filteredNotes} />;
             }}
           />
-          <Route path="/add-folder" component={AddFolder} />
+          <Route
+            path="/add-folder"
+            render={(rprops) => (
+              <AddFolder {...rprops} addFolder={this.addFolder} />
+            )}
+          />
         </main>
       </div>
     );
