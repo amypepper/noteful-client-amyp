@@ -54,7 +54,7 @@ class App extends Component {
     return (
       <div className="App">
         <header className="App__header">
-          <Link to="/">
+          <Link className="link" to="/">
             <h1>Noteful</h1>
           </Link>
         </header>
