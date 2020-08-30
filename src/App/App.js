@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import { Route, Link } from "react-router-dom";
 
 import AddFolder from "../AddFolder/AddFolder";
+import AddNote from "../AddNote/AddNote";
 import config from "../config";
 import NoteListMain from "../NoteListMain/NoteListMain";
 import NoteListNav from "../NoteListNav/NoteListNav";
@@ -91,7 +92,7 @@ class App extends Component {
                   }
                   return null;
                 });
-                return <NotePageNav folder={noteFolder} />;
+                return <NotePageNav {...routeProps} folder={noteFolder} />;
               }}
             />
             {/* This route's job is to render the full list of folders for
@@ -141,6 +142,12 @@ class App extends Component {
               path="/add-folder"
               render={(routeProps) => (
                 <AddFolder {...routeProps} addFolder={this.addFolder} />
+              )}
+            />
+            <Route
+              path="/add-note"
+              render={(routeProps) => (
+                <AddNote {...routeProps} addNote={this.addNote} />
               )}
             />
           </main>

@@ -5,7 +5,9 @@ export default class NotePageNav extends React.Component {
     return (
       <div className="App__nav">
         <p>{this.props.folder.map((folderObj) => folderObj.name)}</p>
-        <button>Go back</button>
+        <button type="button" onClick={() => this.props.history.goBack()}>
+          Go back
+        </button>
       </div>
     );
   }
