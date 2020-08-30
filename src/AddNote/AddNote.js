@@ -1,74 +1,148 @@
 import React, { Component } from "react";
-import NotefulForm from "../NotefulForm/NotefulForm";
-import ApiContext from "../ApiContext";
+
 import config from "../config";
+// import ValidationError from "../ValidationError";
 
 export default class AddNote extends Component {
-  static defaultProps = {
-    history: {
-      push: () => {},
+  state = {
+    note: {
+      title: {
+        value: "",
+      },
+      content: {
+        value: "",
+      },
+      folder: {
+        value: "",
+      },
+      touched: false,
     },
   };
-  static contextType = ApiContext;
+  // updates the local state that controls this component's form
+  updateNoteTitle(noteTitle) {
+    this.setState({
+      note: {
+        title: {
+          value: noteTitle,
+        },
+      },
+    });
+  }
+
+  updateNoteContent(noteContent) {
+    this.setState({
+      note: {
+        content: {
+          value: noteContent,
+        },
+      },
+    });
+  }
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const newNote = {
-      name: e.target["note-name"].value,
-      content: e.target["note-content"].value,
-      folderId: e.target["note-folder-id"].value,
-      modified: new Date(),
+    // grab the note obj from local state
+    const { note } = this.state;
+    // create the value you want to POST (only need name b/c db
+    // provides the id)
+    const newnoteObj = {
+      name: note.value,
     };
-    fetch(`${config.API_ENDPOINT}/notes`, {
+    const postOptions = {
       method: "POST",
+      // must provide `'content-type` for security purposes
       headers: {
         "content-type": "application/json",
       },
-      body: JSON.stringify(newNote),
-    })
+      // turn newnoteObj into JSON
+      body: JSON.stringify(newnoteObj),
+    };
+
+    fetch(`${config.API_ENDPOINT}/notes`, postOptions)
       .then((res) => {
-        if (!res.ok) return res.json().then((e) => Promise.reject(e));
+        if (!res.ok) {
+          throw new Error("Something went wrong, please try again later");
+        }
         return res.json();
       })
-      .then((note) => {
-        this.context.addNote(note);
-        this.props.history.push(`/folder/${note.folderId}`);
+      .then((data) => {
+        // pass the API's response obj to the callback
+        // prop so that App's state can be updated
+        this.props.addnote(data);
+        // takes user back to home page after API request is fulfilled
+        this.props.history.push("/");
       })
-      .catch((error) => {
-        console.error({ error });
+      .catch((err) => {
+        this.setState({
+          error: err.message,
+        });
       });
   };
 
+  validateNoteName() {
+    const noteName = this.state.note.title.value.trim();
+    if (noteName.length === 0) {
+      return "Name is required";
+    } else if (noteName.length < 3) {
+      return "Name must be at least 3 characters long";
+    }
+  }
+
   render() {
-    const { folders = [] } = this.context;
     return (
-      <section className="AddNote">
-        <h2>Create a note</h2>
-        <NotefulForm onSubmit={this.handleSubmit}>
-          <div className="field">
-            <label htmlFor="note-name-input">Name</label>
-            <input type="text" id="note-name-input" name="note-name" />
-          </div>
-          <div className="field">
-            <label htmlFor="note-content-input">Content</label>
-            <textarea id="note-content-input" name="note-content" />
-          </div>
-          <div className="field">
-            <label htmlFor="note-folder-select">Folder</label>
-            <select id="note-folder-select" name="note-folder-id">
-              <option value={null}>...</option>
-              {folders.map((folder) => (
-                <option key={folder.id} value={folder.id}>
-                  {folder.name}
-                </option>
-              ))}
-            </select>
-          </div>
-          <div className="buttons">
-            <button type="submit">Add note</button>
-          </div>
-        </NotefulForm>
-      </section>
+      <form className="add-note-form" onSubmit={(e) => this.handleSubmit(e)}>
+        <fieldset>
+          <label htmlFor="note-title">New Note Title</label>
+          <input
+            type="text"
+            name="note-title"
+            id="note-title"
+            value={this.state.note.title.value}
+            onChange={(e) => this.updateNoteTitle(e.target.value)}
+          />
+          <label htmlFor="note-content">Content</label>
+          <input
+            type="text"
+            name="note-content"
+            id="note-content"
+            value={this.state.note.content.value}
+            onChange={(e) => this.updateNoteContent(e.target.value)}
+          />
+
+          {/* <label htmlFor="note-folder">Folder</label>
+          <input
+            type="text"
+            name="note-folder"
+            id="note-folder"
+            value={this.state.note.folder.value}
+            onChange={(e) => this.updateNoteFolder(e.target.value)}
+          /> */}
+
+          {/* runs validation only when user starts typing in the input */}
+          {/* {this.state.note.touched && (
+            <ValidationError message={this.validateNoteName()} />
+          )} */}
+        </fieldset>
+        <fieldset className="button__group">
+          <button
+            type="submit"
+            className="button"
+            // keeps save button inaccessible until note name passes
+            // validation
+            disabled={this.validateNoteName()}
+          >
+            Save
+          </button>
+          <button
+            type="reset"
+            className="button"
+            // redirect user to home page on hitting Cancel
+            onClick={() => this.props.history.push("/")}
+          >
+            Cancel
+          </button>
+        </fieldset>
+      </form>
     );
   }
 }

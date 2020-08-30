@@ -81,7 +81,6 @@ export default class AddFolder extends React.Component {
             type="text"
             name="folder"
             id="folder"
-            ref={this.nameInput}
             value={this.state.folder.value}
             onChange={(e) => this.updateFolder(e.target.value)}
           />
