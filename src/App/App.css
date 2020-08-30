@@ -12,7 +12,7 @@
 
 .App__nav {
   /* background-color: #0b1b32; */
-  color: #fff;
+  color: rgb(52, 7, 177);
   grid-area: sidebar;
   height: 100vh;
   overflow: auto;
