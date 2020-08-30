@@ -103,6 +103,7 @@ export default class AddFolder extends React.Component {
           <button
             type="reset"
             className="button"
+            // redirect user to home page on hitting Cancel
             onClick={() => this.props.history.push("/")}
           >
             Cancel
