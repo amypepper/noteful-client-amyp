@@ -1,0 +1,7 @@
+.add-folder-form {
+  display: flex;
+}
+
+.add-folder-form * {
+  justify-content: center;
+}

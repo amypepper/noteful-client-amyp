@@ -8,19 +8,12 @@
   grid-template-rows: 120px 1fr;
   min-height: 100vh;
   display: flex;
+  flex-direction: column;
+  width: 100vw;
 }
 
 .App * {
   text-decoration: none;
-}
-
-.App__nav {
-  /* background-color: #0b1b32; */
-  color: rgb(52, 7, 177);
-  grid-area: sidebar;
-  height: 100vh;
-  overflow: auto;
-  flex-direction: column;
 }
 
 .App__header {
@@ -31,18 +24,33 @@
   padding-left: 16px;
   padding-top: 32px;
   text-shadow: 2px 1px 2px black;
-  /* width: 100vw; */
-  display: flex;
+  width: 100%;
 }
 
 .App__header a {
   color: #bdbdbd;
 }
 
+.App__nav {
+  /* background-color: #0b1b32; */
+  color: rgb(52, 7, 177);
+  grid-area: sidebar;
+  height: 100vh;
+  overflow: auto;
+  flex-direction: column;
+  width: 40%;
+}
+
+.main-content__wrapper {
+  display: flex;
+  flex-direction: row;
+}
+
 .App__main {
   /* background-color: #102541; */
   grid-area: main;
   height: calc(100vh - 120px);
+  width: 100vw;
   overflow: auto;
-  flex-direction: column;
+  flex-direction: row;
 }
