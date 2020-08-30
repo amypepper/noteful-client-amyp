@@ -16,17 +16,14 @@ class App extends Component {
     notes: [],
   };
 
-  findNoteFolder = (noteId) => {
-    const selectedNote = this.findSelectedNote(noteId);
-    return this.state.folders.filter(
-      (folder) => folder.id === selectedNote.folderId
-    );
+  findFolder = (folderId) => {
+    return this.state.folders.filter((folder) => folder.id === folderId);
   };
   findSelectedNote = (noteId) => {
     return this.state.notes.filter((note) => note.id === noteId);
   };
   filterNotes = (folderId) => {
-    return this.state.notes.filter((note) => note["folderId"] === folderId);
+    return this.state.notes.filter((note) => note.folderId === folderId);
   };
 
   addFolder = (newFolder) => {
@@ -62,6 +59,8 @@ class App extends Component {
           </Link>
         </header>
         <nav>
+          {/* This route's job is to render all the folders on the 
+          home page */}
           <Route
             exact
             path="/"
@@ -70,28 +69,37 @@ class App extends Component {
             }}
           />
           {/* this route's job is to render the nav sidebar that shows the
-          folder that contains the currently selected note, plus a Go Back
+          folder containing the currently selected note, plus a Go Back
           button */}
           <Route
             path="/note/:noteid"
             // filter for the folder whose id matches the `folderid` of the
             // note from the URL
             render={(routeProps) => {
+              // grab the note based on the noteid in the URL
               const selectedNote = this.findSelectedNote(
                 routeProps.match.params.noteid
               );
-              const noteFolder = this.state.folders.filter(
-                (folder) => folder.id === selectedNote.folderId
-              );
+              // sort through folders for the id that matches
+              // `selectedNote`'s folder's id
+              const noteFolder = this.state.folders.filter((folder) => {
+                // but first, check that selectedNote[0] exists because
+                // it will be empty when render is first called
+                if (selectedNote[0]) {
+                  return folder.id === selectedNote[0].folderId;
+                }
+                return null;
+              });
               return <NotePageNav folder={noteFolder} />;
             }}
           />
+          {/* This route's job is to render the full list of folders for
+          navigation purposes, when user is viewing the contents of a
+          specific folder */}
           <Route
             path="/folder/:folderid"
-            render={(routeProps) => {
-              return (
-                <NoteListNav {...routeProps} folders={this.state.folders} />
-              );
+            render={() => {
+              return <NoteListNav folders={this.state.folders} />;
             }}
           />
         </nav>
