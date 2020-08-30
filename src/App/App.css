@@ -14,10 +14,6 @@
   text-decoration: none;
 }
 
- {
-  cursor: pointer;
-}
-
 .App__nav {
   /* background-color: #0b1b32; */
   color: rgb(52, 7, 177);
