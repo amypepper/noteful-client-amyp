@@ -104,6 +104,14 @@ class App extends Component {
                 return <NoteListNav folders={this.state.folders} />;
               }}
             />
+            <Route
+              path="/add-note"
+              render={() => <NoteListNav folders={this.state.folders} />}
+            />
+            <Route
+              path="/add-folder"
+              render={() => <NoteListNav folders={this.state.folders} />}
+            />
           </nav>
           <main className="App__main">
             {/* This route's job is to render the full list of notes on the 
@@ -147,7 +155,11 @@ class App extends Component {
             <Route
               path="/add-note"
               render={(routeProps) => (
-                <AddNote {...routeProps} addNote={this.addNote} />
+                <AddNote
+                  {...routeProps}
+                  {...this.state}
+                  addNote={this.addNote}
+                />
               )}
             />
           </main>

@@ -1,43 +1,47 @@
 import React, { Component } from "react";
 
+import "./AddNote.css";
 import config from "../config";
-// import ValidationError from "../ValidationError";
+import ValidationError from "../ValidationError";
 
 export default class AddNote extends Component {
   state = {
-    note: {
-      title: {
-        value: "",
-      },
-      content: {
-        value: "",
-      },
-      folder: {
-        value: "",
-      },
-      touched: false,
+    title: {
+      value: "",
     },
+    content: {
+      value: "",
+    },
+    folder: {
+      value: "",
+    },
+    touched: false,
   };
-  // updates the local state that controls this component's form
-  updateNoteTitle(noteTitle) {
-    this.setState({
-      note: {
-        title: {
-          value: noteTitle,
-        },
-      },
-    });
-  }
 
-  updateNoteContent(noteContent) {
+  updateNoteTitle = (noteTitle) => {
     this.setState({
-      note: {
-        content: {
-          value: noteContent,
-        },
+      title: {
+        value: noteTitle,
       },
+      touched: true,
     });
-  }
+  };
+  updateNoteContent = (noteContent) => {
+    this.setState({
+      content: {
+        value: noteContent,
+      },
+      touched: true,
+    });
+  };
+  updateNoteFolder = (noteFolder) => {
+    this.setState({
+      folder: {
+        value: noteFolder,
+      },
+      touched: true,
+    });
+  };
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -79,57 +83,90 @@ export default class AddNote extends Component {
       });
   };
 
-  validateNoteName() {
-    const noteName = this.state.note.title.value.trim();
+  validateNoteName = () => {
+    const noteName = this.state.title.value.trim();
     if (noteName.length === 0) {
-      return "Name is required";
+      return "Title is required";
     } else if (noteName.length < 3) {
-      return "Name must be at least 3 characters long";
+      return "Title must be at least 3 characters long";
     }
-  }
+  };
+
+  validateNoteContent = () => {
+    const content = this.state.content.value.trim();
+    if (!content.length) {
+      return "Content is required";
+    }
+  };
+
+  validateFolderSelection = () => {
+    const folder = this.state.folder.value.trim();
+    if (folder.length === 0) {
+      return "You must select a folder";
+    }
+  };
 
   render() {
     return (
       <form className="add-note-form" onSubmit={(e) => this.handleSubmit(e)}>
         <fieldset>
-          <label htmlFor="note-title">New Note Title</label>
-          <input
-            type="text"
-            name="note-title"
-            id="note-title"
-            value={this.state.note.title.value}
-            onChange={(e) => this.updateNoteTitle(e.target.value)}
-          />
-          <label htmlFor="note-content">Content</label>
-          <input
-            type="text"
-            name="note-content"
-            id="note-content"
-            value={this.state.note.content.value}
-            onChange={(e) => this.updateNoteContent(e.target.value)}
-          />
-
-          {/* <label htmlFor="note-folder">Folder</label>
-          <input
-            type="text"
-            name="note-folder"
-            id="note-folder"
-            value={this.state.note.folder.value}
-            onChange={(e) => this.updateNoteFolder(e.target.value)}
-          /> */}
-
-          {/* runs validation only when user starts typing in the input */}
-          {/* {this.state.note.touched && (
-            <ValidationError message={this.validateNoteName()} />
-          )} */}
+          <div className="add-title-content-folder" id="note-form-wrapper">
+            <label htmlFor="note-title">New Note Title</label>
+            <input
+              type="text"
+              name="note-title"
+              id="note-title"
+              value={this.state.title.value}
+              onChange={(e) => this.updateNoteTitle(e.target.value)}
+            />
+            {this.state.touched && (
+              <ValidationError message={this.validateNoteName()} />
+            )}
+            <label htmlFor="note-content">Content</label>
+            <textarea
+              name="note-content"
+              id="note-content"
+              cols="40"
+              rows="5"
+              value={this.state.content.value}
+              onChange={(e) => this.updateNoteContent(e.target.value)}
+            >
+              Add your note here
+            </textarea>
+            {this.state.touched && (
+              <ValidationError message={this.validateNoteContent()} />
+            )}
+            <label htmlFor="note-folder-select">Folder</label>
+            <select
+              name="note-folder"
+              id="note-folder-select"
+              value={this.state.folder.value}
+              onChange={(e) => this.updateNoteFolder(e.target.value)}
+            >
+              <option value="">Please choose a folder</option>
+              {this.props.folders.map((folder, i) => (
+                <option key={i} value={folder.name}>
+                  {folder.name}
+                </option>
+              ))}
+            </select>
+            {this.state.touched && (
+              <ValidationError message={this.validateFolderSelection()} />
+            )}
+          </div>
+          {/* runs validation only when user starts typing */}
         </fieldset>
         <fieldset className="button__group">
           <button
             type="submit"
             className="button"
-            // keeps save button inaccessible until note name passes
+            // keeps save button inaccessible until note info passes
             // validation
-            disabled={this.validateNoteName()}
+            disabled={
+              (this.state.title.value.length === 0) |
+              (this.state.content.value.length === 0) |
+              (this.state.folder.value.length === 0)
+            }
           >
             Save
           </button>
