@@ -6,7 +6,7 @@ import ValidationError from "../ValidationError";
 
 export default class AddNote extends Component {
   state = {
-    title: {
+    name: {
       value: "",
     },
     content: {
@@ -18,14 +18,15 @@ export default class AddNote extends Component {
     touched: false,
   };
 
-  updateNoteTitle = (noteTitle) => {
+  updateNoteName = (noteName) => {
     this.setState({
-      title: {
-        value: noteTitle,
+      name: {
+        value: noteName,
       },
       touched: true,
     });
   };
+
   updateNoteContent = (noteContent) => {
     this.setState({
       content: {
@@ -34,6 +35,7 @@ export default class AddNote extends Component {
       touched: true,
     });
   };
+
   updateNoteFolder = (noteFolder) => {
     this.setState({
       folder: {
@@ -43,14 +45,24 @@ export default class AddNote extends Component {
     });
   };
 
+  addFolderId = () => {
+    const folderObj = this.props.folders.find(
+      (folder) => folder.name === this.state.folder.value
+    );
+    return folderObj.id;
+  };
+  // what I've tried: componentDidUpdate, putting it in handleSubmit, separate new method; why is folderObj.id undefined?????
+
   handleSubmit = (e) => {
     e.preventDefault();
-    // grab the note obj from local state
-    const { note } = this.state;
-    // create the value you want to POST (only need name b/c db
-    // provides the id)
-    const newnoteObj = {
-      name: note.value,
+    const { name, content, folderId } = this.state;
+    console.log(this.addFolderId());
+    // create the value you want to POST
+    const newNoteObj = {
+      name: name.value,
+      modified: null,
+      folderId: folderId,
+      content: content.value,
     };
     const postOptions = {
       method: "POST",
@@ -59,7 +71,7 @@ export default class AddNote extends Component {
         "content-type": "application/json",
       },
       // turn newnoteObj into JSON
-      body: JSON.stringify(newnoteObj),
+      body: JSON.stringify(newNoteObj),
     };
 
     fetch(`${config.API_ENDPOINT}/notes`, postOptions)
@@ -72,23 +84,23 @@ export default class AddNote extends Component {
       .then((data) => {
         // pass the API's response obj to the callback
         // prop so that App's state can be updated
-        this.props.addnote(data);
+        this.props.addNote(data);
         // takes user back to home page after API request is fulfilled
         this.props.history.push("/");
       })
       .catch((err) => {
         this.setState({
-          error: err.message,
+          error: err.messge,
         });
       });
   };
 
   validateNoteName = () => {
-    const noteName = this.state.title.value.trim();
+    const noteName = this.state.name.value.trim();
     if (noteName.length === 0) {
-      return "Title is required";
+      return "name is required";
     } else if (noteName.length < 3) {
-      return "Title must be at least 3 characters long";
+      return "name must be at least 3 characters long";
     }
   };
 
@@ -106,18 +118,18 @@ export default class AddNote extends Component {
     }
   };
 
-  render() {
+  render = () => {
     return (
       <form className="add-note-form" onSubmit={(e) => this.handleSubmit(e)}>
         <fieldset>
-          <div className="add-title-content-folder" id="note-form-wrapper">
-            <label htmlFor="note-title">New Note Title</label>
+          <div className="add-name-content-folder" id="note-form-wrapper">
+            <label htmlFor="note-name">New Note Name</label>
             <input
               type="text"
-              name="note-title"
-              id="note-title"
-              value={this.state.title.value}
-              onChange={(e) => this.updateNoteTitle(e.target.value)}
+              name="note-name"
+              id="note-name"
+              value={this.state.name.value}
+              onChange={(e) => this.updateNoteName(e.target.value)}
             />
             {this.state.touched && (
               <ValidationError message={this.validateNoteName()} />
@@ -163,7 +175,7 @@ export default class AddNote extends Component {
             // keeps save button inaccessible until note info passes
             // validation
             disabled={
-              (this.state.title.value.length === 0) |
+              (this.state.name.value.length === 0) |
               (this.state.content.value.length === 0) |
               (this.state.folder.value.length === 0)
             }
@@ -181,5 +193,5 @@ export default class AddNote extends Component {
         </fieldset>
       </form>
     );
-  }
+  };
 }

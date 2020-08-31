@@ -33,6 +33,12 @@ class App extends Component {
     });
   };
 
+  addNote = (newNote) => {
+    this.setState({
+      notes: [...this.state.notes, newNote],
+    });
+  };
+
   componentDidMount() {
     fetch(`${config.API_ENDPOINT}/folders`)
       .then((res) => res.json())
