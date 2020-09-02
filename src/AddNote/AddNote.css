@@ -1,0 +1,21 @@
+.add-note-form {
+  display: flex;
+  flex-direction: column;
+  color: black;
+}
+
+fieldset > div.add-title-content-folder {
+  display: flex;
+  flex-direction: column;
+}
+
+.add-title-content-folder * {
+  width: 100%;
+  padding: 10px;
+  margin: 10px;
+}
+
+button {
+  margin: 15px;
+  padding: 15px;
+}

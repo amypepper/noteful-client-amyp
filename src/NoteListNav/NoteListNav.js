@@ -8,12 +8,14 @@ export default class NoteListNav extends React.Component {
       <ul className="App__nav">
         {this.props.folders.map((folder, i) => {
           return (
-            <NavLink to={`/folder/${folder.id}`}>
+            <NavLink className="link" key={i} to={`/folder/${folder.id}`}>
               <li key={i}>{folder.name}</li>
             </NavLink>
           );
         })}
-        <button>Add folder</button>
+        <NavLink className="link" to="/add-folder">
+          <button>Add folder</button>
+        </NavLink>
       </ul>
     );
   }
