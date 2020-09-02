@@ -54,8 +54,6 @@ export default class AddNote extends Component {
     return folderObj.id;
   };
 
-  // what I've tried: componentDidUpdate, putting it in handleSubmit, separate new method; why is folderObj.id undefined?????
-
   handleSubmit = (e) => {
     e.preventDefault();
     const { name, content, folderId } = this.state;
