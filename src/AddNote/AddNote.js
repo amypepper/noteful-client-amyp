@@ -15,6 +15,7 @@ export default class AddNote extends Component {
     folder: {
       value: "",
     },
+    folderId: "",
     touched: false,
   };
 
@@ -41,22 +42,24 @@ export default class AddNote extends Component {
       folder: {
         value: noteFolder,
       },
+      folderId: this.getFolderId(noteFolder),
       touched: true,
     });
   };
 
-  addFolderId = () => {
+  getFolderId = (noteFolder) => {
     const folderObj = this.props.folders.find(
-      (folder) => folder.name === this.state.folder.value
+      (folder) => folder.name === noteFolder
     );
     return folderObj.id;
   };
+
   // what I've tried: componentDidUpdate, putting it in handleSubmit, separate new method; why is folderObj.id undefined?????
 
   handleSubmit = (e) => {
     e.preventDefault();
     const { name, content, folderId } = this.state;
-    console.log(this.addFolderId());
+
     // create the value you want to POST
     const newNoteObj = {
       name: name.value,
