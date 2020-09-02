@@ -58,10 +58,10 @@ export default class AddNote extends Component {
     e.preventDefault();
     const { name, content, folderId } = this.state;
 
-    // create the value you want to POST
+    // create the value I want to POST
     const newNoteObj = {
       name: name.value,
-      modified: null,
+      modified: new Date(Date.now()),
       folderId: folderId,
       content: content.value,
     };
