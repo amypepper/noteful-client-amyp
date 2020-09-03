@@ -6,8 +6,10 @@ export default class NotePageNav extends React.Component {
     return (
       <div className="App__nav">
         <p>
-          {this.props.folder.map((folderObj) => (
-            <NavLink to={`/folder/${folderObj.id}`}>{folderObj.name}</NavLink>
+          {this.props.folder.map((folderObj, i) => (
+            <NavLink key={i} to={`/folder/${folderObj.id}`}>
+              {folderObj.name}
+            </NavLink>
           ))}
         </p>
         <button type="button" onClick={() => this.props.history.goBack()}>
