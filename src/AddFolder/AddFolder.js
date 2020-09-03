@@ -2,8 +2,11 @@ import React from "react";
 
 import config from "../config";
 import ValidationError from "../ValidationError";
+import Context from "../Context";
 
 export default class AddFolder extends React.Component {
+  static contextType = Context;
+
   state = {
     folder: {
       value: "",
@@ -52,7 +55,7 @@ export default class AddFolder extends React.Component {
       .then((data) => {
         // pass the API's response obj to the callback
         // prop so that App's state can be updated
-        this.props.addFolder(data);
+        this.context.addFolder(data);
         // takes user back to home page after API request is fulfilled
         this.props.history.push("/");
       })

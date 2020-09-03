@@ -1,5 +1,5 @@
 import React from "react";
 
-export default function CircleButton(props) {
+export default function CircleButton() {
   return <button>Delete Note</button>;
 }

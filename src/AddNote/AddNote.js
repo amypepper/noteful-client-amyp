@@ -2,9 +2,12 @@ import React, { Component } from "react";
 
 import "./AddNote.css";
 import config from "../config";
+import Context from "../Context";
 import ValidationError from "../ValidationError";
 
 export default class AddNote extends Component {
+  static contextType = Context;
+
   state = {
     name: {
       value: "",
@@ -48,7 +51,7 @@ export default class AddNote extends Component {
   };
 
   getFolderId = (noteFolder) => {
-    const folderObj = this.props.folders.find(
+    const folderObj = this.context.folders.find(
       (folder) => folder.name === noteFolder
     );
     return folderObj.id;
@@ -85,7 +88,7 @@ export default class AddNote extends Component {
       .then((data) => {
         // pass the API's response obj to the callback
         // prop so that App's state can be updated
-        this.props.addNote(data);
+        this.context.addNote(data);
         // takes user back to home page after API request is fulfilled
         this.props.history.push("/");
       })
@@ -157,7 +160,7 @@ export default class AddNote extends Component {
               onChange={(e) => this.updateNoteFolder(e.target.value)}
             >
               <option value="">Please choose a folder</option>
-              {this.props.folders.map((folder, i) => (
+              {this.context.folders.map((folder, i) => (
                 <option key={i} value={folder.name}>
                   {folder.name}
                 </option>
