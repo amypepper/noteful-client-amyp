@@ -1,5 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
 
 import Context from "../Context";
 import NoteDetails from "../NoteDetails/NoteDetails";
@@ -13,11 +14,11 @@ export default class NoteListMain extends React.Component {
         this.props.match.params.folderid
       );
       return filteredNotes.map((note, i) => (
-        <NoteDetails note={note} key={i} />
+        <NoteDetails history={this.props.history} note={note} key={i} />
       ));
     } else {
       return this.context.notes.map((note, i) => (
-        <NoteDetails note={note} key={i} />
+        <NoteDetails history={this.props.history} note={note} key={i} />
       ));
     }
   };
@@ -32,3 +33,8 @@ export default class NoteListMain extends React.Component {
     );
   }
 }
+
+NoteListMain.propTypes = {
+  match: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
+};

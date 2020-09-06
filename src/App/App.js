@@ -22,7 +22,7 @@ class App extends Component {
     },
 
     findSelectedNote: (noteId) => {
-      return this.state.notes.filter((note) => note.id === noteId);
+      return this.state.notes.find((note) => note.id === noteId);
     },
 
     filterNotes: (folderId) => {
@@ -102,15 +102,17 @@ class App extends Component {
                     );
                     // sort through folders for the id that matches the
                     // `selectedNote` object's folderId key
-                    const noteFolder = this.state.folders.filter((folder) => {
+                    const noteFolder = this.state.folders.find((folder) => {
                       // but first, check that selectedNote[0] exists because
                       // it will be empty when render is first called
-                      if (selectedNote[0]) {
-                        return folder.id === selectedNote[0].folderId;
+                      if (selectedNote) {
+                        return folder.id === selectedNote.folderId;
                       }
                       return null;
                     });
-                    return <NotePageNav {...routeProps} folder={noteFolder} />;
+                    return (
+                      <NotePageNav {...routeProps} folder={{ ...noteFolder }} />
+                    );
                   }}
                 />
 
@@ -145,7 +147,12 @@ class App extends Component {
                     const selectedNote = this.state.findSelectedNote(
                       routeProps.match.params.noteid
                     );
-                    return <NotePageMain note={selectedNote} />;
+                    return (
+                      <NotePageMain
+                        note={{ ...selectedNote }}
+                        {...routeProps}
+                      />
+                    );
                   }}
                 />
 

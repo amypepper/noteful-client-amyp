@@ -1,13 +1,25 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import PropTypes from "prop-types";
+
 import DeleteButton from "../DeleteButton/DeleteButton";
-import { NavLink } from "react-router-dom";
 
 export default function NoteDetails(props) {
   return (
-    <NavLink className="link" to={`/note/${props.note.id}`}>
+    <Link className="link" to={`/note/${props.note.id}`}>
       <h3>{props.note.name}</h3>
-      <p>{props.note.modified}</p>
-      <DeleteButton note={props.note} />
-    </NavLink>
+      <p>Last modified: {props.note.modified}</p>
+
+      <DeleteButton note={props.note} history={props.history} />
+    </Link>
   );
 }
+
+NoteDetails.propTypes = {
+  note: PropTypes.shape({
+    id: PropTypes.string,
+    name: PropTypes.string,
+    modified: PropTypes.string,
+  }).isRequired,
+  history: PropTypes.object.isRequired,
+};

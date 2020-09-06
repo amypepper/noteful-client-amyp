@@ -1,5 +1,5 @@
 import React from "react";
-
+import PropTypes from "prop-types";
 import config from "../config";
 import Context from "../Context";
 
@@ -31,6 +31,8 @@ export default class DeleteButton extends React.Component {
         // call the callback when the request is successful
         // this is where the App component can remove it from state
         this.context.deleteNote(id);
+        // go back to the home page
+        this.props.history.push("/");
       })
       .catch((error) => {
         console.error(error);
@@ -45,3 +47,12 @@ export default class DeleteButton extends React.Component {
     );
   }
 }
+
+DeleteButton.defaultProps = {
+  note: {},
+};
+
+DeleteButton.propTypes = {
+  note: PropTypes.object,
+  history: PropTypes.object,
+};
