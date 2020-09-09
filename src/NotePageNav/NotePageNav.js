@@ -19,6 +19,14 @@ export default class NotePageNav extends React.Component {
   }
 }
 
+NotePageNav.defaultProps = {
+  folder: {
+    id: "",
+    name: "",
+  },
+  history: {},
+};
+
 NotePageNav.propTypes = {
   folder: PropTypes.shape({
     id: PropTypes.string,

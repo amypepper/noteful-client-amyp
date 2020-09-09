@@ -34,6 +34,15 @@ export default class NoteListMain extends React.Component {
   }
 }
 
+NoteListMain.defaultProps = {
+  match: {
+    params: {
+      folderid: "",
+    },
+  },
+  history: {},
+};
+
 NoteListMain.propTypes = {
   match: PropTypes.object.isRequired,
   history: PropTypes.object.isRequired,

@@ -16,6 +16,13 @@ export default function NotePageMain(props) {
   );
 }
 
+NotePageMain.defaultProps = {
+  note: {
+    content: "",
+  },
+  history: {},
+};
+
 NotePageMain.propTypes = {
   note: PropTypes.shape({
     content: PropTypes.string,
