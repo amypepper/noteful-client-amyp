@@ -14,7 +14,7 @@ export default class AddFolder extends React.Component {
       touched: false,
     },
   };
-  // updates the local state that controls this component's form
+
   updateFolder(folderName) {
     this.setState({
       folder: { value: folderName, touched: true },
@@ -29,20 +29,15 @@ export default class AddFolder extends React.Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    // grab the folder obj from local state
     const { folder } = this.state;
-    // create the value you want to POST (only need name b/c db
-    // provides the id)
     const newFolderObj = {
       name: folder.value,
     };
     const postOptions = {
       method: "POST",
-      // must provide `'content-type` for security purposes
       headers: {
         "content-type": "application/json",
       },
-      // turn newFolderObj into JSON
       body: JSON.stringify(newFolderObj),
     };
 
@@ -54,10 +49,7 @@ export default class AddFolder extends React.Component {
         return res.json();
       })
       .then((data) => {
-        // pass the API's response obj to the callback
-        // prop so that App's state can be updated
         this.context.addFolder(data);
-        // takes user back to home page after API request is fulfilled
         this.props.history.push("/");
       })
       .catch((err) => {
@@ -88,7 +80,7 @@ export default class AddFolder extends React.Component {
             value={this.state.folder.value}
             onChange={(e) => this.updateFolder(e.target.value)}
           />
-          {/* runs validation only when user starts typing in the input */}
+
           {this.state.folder.touched && (
             <ValidationError message={this.validateFolderName()} />
           )}
@@ -97,8 +89,6 @@ export default class AddFolder extends React.Component {
           <button
             type="submit"
             className="button"
-            // keeps save button inaccessible until folder name passes
-            // validation
             disabled={this.validateFolderName()}
           >
             Save
@@ -106,7 +96,6 @@ export default class AddFolder extends React.Component {
           <button
             type="reset"
             className="button"
-            // redirect user to home page on hitting Cancel
             onClick={() => this.props.history.push("/")}
           >
             Cancel

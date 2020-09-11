@@ -19,19 +19,15 @@ export default class DeleteButton extends React.Component {
     fetch(`${config.API_ENDPOINT}/notes/${id}`, deleteOptions)
       .then((res) => {
         if (!res.ok) {
-          // get the error message from the response,
           return res.json().then((error) => {
-            // then throw it
             throw error;
           });
         }
         return res.json();
       })
       .then(() => {
-        // call the callback when the request is successful
-        // this is where the App component can remove it from state
         this.context.deleteNote(id);
-        // go back to the home page
+
         this.props.history.push("/");
       })
       .catch((error) => {

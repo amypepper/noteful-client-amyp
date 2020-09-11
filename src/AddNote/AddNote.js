@@ -62,7 +62,6 @@ export default class AddNote extends Component {
     e.preventDefault();
     const { name, content, folderId } = this.state;
 
-    // create the value I want to POST
     const newNoteObj = {
       name: name.value,
       modified: new Date(Date.now()),
@@ -71,11 +70,10 @@ export default class AddNote extends Component {
     };
     const postOptions = {
       method: "POST",
-      // must provide `'content-type` for security purposes
+
       headers: {
         "content-type": "application/json",
       },
-      // turn newnoteObj into JSON
       body: JSON.stringify(newNoteObj),
     };
 
@@ -87,10 +85,8 @@ export default class AddNote extends Component {
         return res.json();
       })
       .then((data) => {
-        // pass the API's response obj to the callback
-        // prop so that App's state can be updated
         this.context.addNote(data);
-        // takes user back to home page after API request is fulfilled
+
         this.props.history.push("/");
       })
       .catch((err) => {
@@ -171,14 +167,11 @@ export default class AddNote extends Component {
               <ValidationError message={this.validateFolderSelection()} />
             )}
           </div>
-          {/* runs validation only when user starts typing */}
         </fieldset>
         <fieldset className="button__group">
           <button
             type="submit"
             className="button"
-            // keeps save button inaccessible until note info passes
-            // validation
             disabled={
               (this.state.name.value.length === 0) |
               (this.state.content.value.length === 0) |
@@ -190,7 +183,6 @@ export default class AddNote extends Component {
           <button
             type="reset"
             className="button"
-            // redirect user to home page on hitting Cancel
             onClick={() => this.props.history.push("/")}
           >
             Cancel
