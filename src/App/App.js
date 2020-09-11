@@ -5,7 +5,7 @@ import AddFolder from "../AddFolder/AddFolder";
 import AddNote from "../AddNote/AddNote";
 import config from "../config";
 import Context from "../Context";
-import NotefulError from "../NotefulError";
+import ErrorBoundary from "../ErrorBoundary";
 import NoteListMain from "../NoteListMain/NoteListMain";
 import NoteListNav from "../NoteListNav/NoteListNav";
 import NotePageMain from "../NotePageMain/NotePageMain";
@@ -68,7 +68,7 @@ class App extends Component {
 
   render() {
     return (
-      <NotefulError>
+      <ErrorBoundary>
         <Context.Provider value={this.state}>
           <div className="App">
             <header className="App__header">
@@ -168,20 +168,23 @@ class App extends Component {
                 {/* This route's job is to take you to the form where you can create
           a new folder that will be POSTed to the JSON server; this is the
           only route that needs the addFolder callback prop */}
-                <Route
-                  path="/add-folder"
-                  render={(routeProps) => <AddFolder {...routeProps} />}
-                />
-
-                <Route
-                  path="/add-note"
-                  render={(routeProps) => <AddNote {...routeProps} />}
-                />
+                <ErrorBoundary>
+                  <Route
+                    path="/add-folder"
+                    render={(routeProps) => <AddFolder {...routeProps} />}
+                  />
+                </ErrorBoundary>
+                <ErrorBoundary>
+                  <Route
+                    path="/add-note"
+                    render={(routeProps) => <AddNote {...routeProps} />}
+                  />
+                </ErrorBoundary>
               </main>
             </div>
           </div>
         </Context.Provider>
-      </NotefulError>
+      </ErrorBoundary>
     );
   }
 }

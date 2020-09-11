@@ -53,6 +53,11 @@ DeleteButton.defaultProps = {
 };
 
 DeleteButton.propTypes = {
-  note: PropTypes.object,
-  history: PropTypes.object,
+  note: PropTypes.shape({
+    id: PropTypes.string,
+  }).isRequired,
+  history: PropTypes.object.isRequired,
+  context: PropTypes.shape({
+    deleteNote: PropTypes.elementType,
+  }),
 };

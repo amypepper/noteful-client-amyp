@@ -17,9 +17,11 @@ export default function NoteDetails(props) {
 
 NoteDetails.propTypes = {
   note: PropTypes.shape({
+    folderId: PropTypes.string,
     id: PropTypes.string,
-    name: PropTypes.string,
     modified: PropTypes.string,
+    name: PropTypes.string,
+    content: PropTypes.string,
   }).isRequired,
   history: PropTypes.object.isRequired,
 };

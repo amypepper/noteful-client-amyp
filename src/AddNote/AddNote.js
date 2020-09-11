@@ -3,6 +3,7 @@ import React, { Component } from "react";
 import "./AddNote.css";
 import config from "../config";
 import Context from "../Context";
+import PropTypes from "prop-types";
 import ValidationError from "../ValidationError";
 
 export default class AddNote extends Component {
@@ -199,3 +200,11 @@ export default class AddNote extends Component {
     );
   };
 }
+
+AddNote.propTypes = {
+  context: PropTypes.shape({
+    addNote: PropTypes.func.isRequired,
+    folders: PropTypes.array.isRequired,
+  }),
+  history: PropTypes.object.isRequired,
+};

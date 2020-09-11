@@ -40,10 +40,13 @@ NoteListMain.defaultProps = {
       folderid: "",
     },
   },
-  history: {},
 };
 
 NoteListMain.propTypes = {
   match: PropTypes.object.isRequired,
-  history: PropTypes.object.isRequired,
+
+  context: PropTypes.shape({
+    notes: PropTypes.array,
+    filterNotes: PropTypes.elementType,
+  }),
 };

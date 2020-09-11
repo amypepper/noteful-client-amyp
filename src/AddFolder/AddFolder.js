@@ -1,6 +1,7 @@
 import React from "react";
 
 import config from "../config";
+import PropTypes from "prop-types";
 import ValidationError from "../ValidationError";
 import Context from "../Context";
 
@@ -115,3 +116,10 @@ export default class AddFolder extends React.Component {
     );
   }
 }
+
+AddFolder.propTypes = {
+  context: PropTypes.shape({
+    addFolder: PropTypes.elementType,
+  }),
+  history: PropTypes.object.isRequired,
+};
