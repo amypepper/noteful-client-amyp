@@ -53,7 +53,4 @@ DeleteButton.propTypes = {
     id: PropTypes.string,
   }).isRequired,
   history: PropTypes.object.isRequired,
-  context: PropTypes.shape({
-    deleteNote: PropTypes.elementType,
-  }),
 };

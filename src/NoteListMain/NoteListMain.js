@@ -44,9 +44,6 @@ NoteListMain.defaultProps = {
 
 NoteListMain.propTypes = {
   match: PropTypes.object.isRequired,
-
-  context: PropTypes.shape({
-    notes: PropTypes.array,
-    filterNotes: PropTypes.elementType,
-  }),
+  location: PropTypes.object.isRequired,
+  history: PropTypes.object.isRequired,
 };
