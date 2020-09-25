@@ -73,11 +73,12 @@ export default class AddNote extends Component {
 
       headers: {
         "content-type": "application/json",
+        Authorization: `Bearer ${config.API_KEY}`,
       },
       body: JSON.stringify(newNoteObj),
     };
 
-    fetch(`${config.API_ENDPOINT}/notes`, postOptions)
+    fetch(`${config.API_URL}/api/notes`, postOptions)
       .then((res) => {
         if (!res.ok) {
           throw new Error("Something went wrong, please try again later");

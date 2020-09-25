@@ -49,13 +49,18 @@ class App extends Component {
   };
 
   componentDidMount() {
-    fetch(`${config.API_ENDPOINT}/folders`)
+    const options = {
+      headers: {
+        Authorization: `Bearer ${config.API_KEY}`,
+        Accept: "application/json",
+      },
+    };
+    fetch(`${config.API_URL}/api/folders`, options)
       .then((res) => res.json())
       .then((folders) => this.setState({ folders }));
 
-    fetch(`${config.API_ENDPOINT}/notes`)
+    fetch(`${config.API_URL}/api/notes`, options)
       .then((res) => res.json())
-
       .then((notes) => this.setState({ notes }));
   }
 

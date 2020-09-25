@@ -2,6 +2,7 @@
   "name": "noteful-client",
   "version": "0.1.0",
   "private": true,
+  "proxy": "http://localhost:8000",
   "dependencies": {
     "prop-types": "^15.7.2",
     "react": "^16.6.3",

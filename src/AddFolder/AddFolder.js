@@ -37,11 +37,12 @@ export default class AddFolder extends React.Component {
       method: "POST",
       headers: {
         "content-type": "application/json",
+        Authorization: `Bearer ${config.API_KEY}`,
       },
       body: JSON.stringify(newFolderObj),
     };
 
-    fetch(`${config.API_ENDPOINT}/folders`, postOptions)
+    fetch(`${config.API_URL}/api/folders`, postOptions)
       .then((res) => {
         if (!res.ok) {
           throw new Error("Something went wrong, please try again later");

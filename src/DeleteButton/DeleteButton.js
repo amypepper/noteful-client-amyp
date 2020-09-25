@@ -13,10 +13,11 @@ export default class DeleteButton extends React.Component {
       method: "DELETE",
       headers: {
         "content-type": "application/json",
+        Authorization: `Bearer ${config.API_KEY}`,
       },
     };
 
-    fetch(`${config.API_ENDPOINT}/notes/${id}`, deleteOptions)
+    fetch(`${config.API_URL}/api/notes/${id}`, deleteOptions)
       .then((res) => {
         if (!res.ok) {
           return res.json().then((error) => {
