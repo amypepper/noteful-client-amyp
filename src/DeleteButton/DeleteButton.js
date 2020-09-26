@@ -11,7 +11,6 @@ export default class DeleteButton extends React.Component {
     e.preventDefault();
 
     const id = this.props.note ? this.props.note.id : this.props.folder.id;
-    console.log(id);
     const route = this.props.note ? "notes" : "folders";
 
     const deleteOptions = {
