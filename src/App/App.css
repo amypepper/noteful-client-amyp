@@ -34,7 +34,7 @@
   color: rgb(52, 7, 177);
   grid-area: sidebar;
   height: 100vh;
-  overflow: auto;
+  /* overflow: auto; */
   flex-direction: column;
   width: 50%;
 }
@@ -47,7 +47,7 @@
 .App__main {
   grid-area: main;
   height: calc(100vh - 120px);
-  width: 100vw;
+  width: 50%;
   overflow: auto;
   flex-direction: row;
 }
