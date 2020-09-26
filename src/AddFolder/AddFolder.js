@@ -31,7 +31,7 @@ export default class AddFolder extends React.Component {
     e.preventDefault();
     const { folder } = this.state;
     const newFolderObj = {
-      name: folder.value,
+      title: folder.value,
     };
     const postOptions = {
       method: "POST",
@@ -49,9 +49,9 @@ export default class AddFolder extends React.Component {
         }
         return res.json();
       })
-      .then((data) => {
-        this.context.addFolder(data);
-        this.props.history.push("/");
+      .then((folder) => {
+        this.context.addFolder(folder);
+        this.props.history.push(`/folder/${folder.id}`);
       })
       .catch((err) => {
         this.setState({

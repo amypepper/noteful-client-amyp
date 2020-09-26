@@ -16,19 +16,19 @@ export default function NotePageMain(props) {
   );
 }
 
-NotePageMain.defaultProps = {
-  note: {
-    content: "",
-  },
-  history: {},
-};
+// NotePageMain.defaultProps = {
+//   note: {
+//     content: "",
+//   },
+//   history: {},
+// };
 
 NotePageMain.propTypes = {
   note: PropTypes.shape({
-    folderId: PropTypes.string,
-    id: PropTypes.string,
+    folder_id: PropTypes.number,
+    id: PropTypes.number,
     modified: PropTypes.string,
-    name: PropTypes.string,
+    title: PropTypes.string,
     content: PropTypes.string,
   }).isRequired,
   history: PropTypes.object.isRequired,

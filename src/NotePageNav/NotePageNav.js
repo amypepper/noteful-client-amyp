@@ -8,7 +8,7 @@ export default class NotePageNav extends React.Component {
       <div className="App__nav">
         <p>
           <NavLink to={`/folder/${this.props.folder.id}`}>
-            {this.props.folder.name}
+            {this.props.folder.title}
           </NavLink>
         </p>
         <button type="button" onClick={() => this.props.history.goBack()}>
@@ -22,15 +22,15 @@ export default class NotePageNav extends React.Component {
 NotePageNav.defaultProps = {
   folder: {
     id: "",
-    name: "",
+    title: "",
   },
   history: {},
 };
 
 NotePageNav.propTypes = {
   folder: PropTypes.shape({
-    id: PropTypes.string,
-    name: PropTypes.string,
+    id: PropTypes.number,
+    title: PropTypes.string,
   }).isRequired,
   history: PropTypes.object.isRequired,
 };

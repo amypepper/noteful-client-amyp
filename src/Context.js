@@ -1,10 +1,3 @@
 import React from "react";
 
-export default React.createContext({
-  folders: [
-    {
-      id: "",
-      name: "",
-    },
-  ],
-});
+export default React.createContext();

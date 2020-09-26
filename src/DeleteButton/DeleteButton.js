@@ -24,11 +24,7 @@ export default class DeleteButton extends React.Component {
             throw error;
           });
         }
-        return res.json();
-      })
-      .then(() => {
         this.context.deleteNote(id);
-
         this.props.history.push("/");
       })
       .catch((error) => {
@@ -51,7 +47,7 @@ DeleteButton.defaultProps = {
 
 DeleteButton.propTypes = {
   note: PropTypes.shape({
-    id: PropTypes.string,
+    id: PropTypes.number,
   }).isRequired,
   history: PropTypes.object.isRequired,
 };

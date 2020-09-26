@@ -13,7 +13,7 @@ export default class NoteListNav extends React.Component {
         {this.context.folders.map((folder, i) => {
           return (
             <NavLink className="link" key={i} to={`/folder/${folder.id}`}>
-              <li key={i}>{folder.name}</li>
+              <li key={i}>{folder.title}</li>
             </NavLink>
           );
         })}

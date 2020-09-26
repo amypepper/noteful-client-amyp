@@ -10,7 +10,7 @@ export default class AddNote extends Component {
   static contextType = Context;
 
   state = {
-    name: {
+    title: {
       value: "",
     },
     content: {
@@ -19,13 +19,13 @@ export default class AddNote extends Component {
     folder: {
       value: "",
     },
-    folderId: "",
+    folder_id: "",
     touched: false,
   };
 
   updateNoteName = (noteName) => {
     this.setState({
-      name: {
+      title: {
         value: noteName,
       },
       touched: true,
@@ -46,26 +46,25 @@ export default class AddNote extends Component {
       folder: {
         value: noteFolder,
       },
-      folderId: this.getFolderId(noteFolder),
+      folder_id: this.getFolderId(noteFolder),
       touched: true,
     });
   };
 
   getFolderId = (noteFolder) => {
     const folderObj = this.context.folders.find(
-      (folder) => folder.name === noteFolder
+      (folder) => folder.title === noteFolder
     );
     return folderObj.id;
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const { name, content, folderId } = this.state;
+    const { title, content, folder_id } = this.state;
 
     const newNoteObj = {
-      name: name.value,
-      modified: new Date(Date.now()),
-      folderId: folderId,
+      title: title.value,
+      folder_id: folder_id,
       content: content.value,
     };
     const postOptions = {
@@ -85,10 +84,9 @@ export default class AddNote extends Component {
         }
         return res.json();
       })
-      .then((data) => {
-        this.context.addNote(data);
-
-        this.props.history.push("/");
+      .then((note) => {
+        this.context.addNote(note);
+        this.props.history.push(`/note/${note.id}`);
       })
       .catch((err) => {
         this.setState({
@@ -98,7 +96,7 @@ export default class AddNote extends Component {
   };
 
   validateNoteName = () => {
-    const noteName = this.state.name.value.trim();
+    const noteName = this.state.title.value.trim();
     if (noteName.length === 0) {
       return "name is required";
     } else if (noteName.length < 3) {
@@ -130,7 +128,7 @@ export default class AddNote extends Component {
               type="text"
               name="note-name"
               id="note-name"
-              value={this.state.name.value}
+              value={this.state.title.value}
               onChange={(e) => this.updateNoteName(e.target.value)}
             />
             {this.state.touched && (
@@ -159,8 +157,8 @@ export default class AddNote extends Component {
             >
               <option value="">Please choose a folder</option>
               {this.context.folders.map((folder, i) => (
-                <option key={i} value={folder.name}>
-                  {folder.name}
+                <option key={i} value={folder.title}>
+                  {folder.title}
                 </option>
               ))}
             </select>
@@ -174,7 +172,7 @@ export default class AddNote extends Component {
             type="submit"
             className="button"
             disabled={
-              (this.state.name.value.length === 0) |
+              (this.state.title.value.length === 0) |
               (this.state.content.value.length === 0) |
               (this.state.folder.value.length === 0)
             }

@@ -37,7 +37,7 @@ export default class NoteListMain extends React.Component {
 NoteListMain.defaultProps = {
   match: {
     params: {
-      folderid: "",
+      folderid: null,
     },
   },
 };
