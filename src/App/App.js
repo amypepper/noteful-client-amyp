@@ -45,6 +45,12 @@ class App extends Component {
         notes: this.state.notes.filter((note) => note.id !== noteId),
       });
     },
+
+    deleteFolder: (folderId) => {
+      this.setState({
+        folders: this.state.folders.filter((folder) => folder.id !== folderId),
+      });
+    },
   };
 
   componentDidMount() {
