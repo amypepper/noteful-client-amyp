@@ -1,16 +1,27 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import PropTypes from "prop-types";
+
+import "./NotePageNav.css";
 
 export default class NotePageNav extends React.Component {
   render() {
     return (
       <div className="App__nav">
-        <p>
-          <NavLink to={`/folder/${this.props.folder.id}`}>
+        <div className="folder-link-wrapper">
+          <NavLink
+            className="folder-link"
+            to={`/folder/${this.props.folder.id}`}
+          >
             {this.props.folder.title}
           </NavLink>
-        </p>
+          <Link
+            className="edit-link"
+            to={`/edit/folder/${this.props.folder.id}`}
+          >
+            Edit Folder
+          </Link>
+        </div>
         <button type="button" onClick={() => this.props.history.goBack()}>
           Go back
         </button>

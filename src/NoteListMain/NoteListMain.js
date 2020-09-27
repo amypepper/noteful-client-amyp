@@ -22,6 +22,7 @@ export default class NoteListMain extends React.Component {
       ));
     }
   };
+
   render() {
     return (
       <ul>

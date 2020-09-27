@@ -8,14 +8,11 @@ export default function NotePageMain(props) {
   return (
     <>
       <section>
-        <p>{props.note.content}</p>
-      </section>
-      <section>
         <NoteDetails note={props.note} history={props.history} />
       </section>
-      <Link to="/add-note">
-        <button>Update Note</button>
-      </Link>
+      <section>
+        <p>{props.note.content}</p>
+      </section>
     </>
   );
 }

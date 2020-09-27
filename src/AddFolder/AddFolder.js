@@ -73,11 +73,11 @@ export default class AddFolder extends React.Component {
     return (
       <form className="add-folder-form" onSubmit={(e) => this.handleSubmit(e)}>
         <fieldset>
-          <label htmlFor="folder">New Folder Name</label>
+          <label htmlFor="add-folder">New Folder Name</label>
           <input
             type="text"
-            name="folder"
-            id="folder"
+            name="add-folder"
+            id="add-folder"
             value={this.state.folder.value}
             onChange={(e) => this.updateFolder(e.target.value)}
           />

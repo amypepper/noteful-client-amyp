@@ -10,6 +10,8 @@ import NoteListMain from "../NoteListMain/NoteListMain";
 import NoteListNav from "../NoteListNav/NoteListNav";
 import NotePageMain from "../NotePageMain/NotePageMain";
 import NotePageNav from "../NotePageNav/NotePageNav";
+import UpdateFolder from "../UpdateFolder/UpdateFolder";
+import UpdateNote from "../UpdateNote/UpdateNote";
 
 import "./App.css";
 
@@ -39,6 +41,30 @@ class App extends Component {
         notes: [...this.state.notes, newNote],
       });
     },
+
+    updateFolder: (updatedFolder) => {
+      console.log("new folder: ", updatedFolder);
+
+      const outOfDateFolder = this.state.folders.find(
+        (folder) => folder.id === Number(updatedFolder.id)
+      );
+      const updatedFolderObj = {
+        id: outOfDateFolder.id,
+        title: updatedFolder.title,
+        date_created: outOfDateFolder.date_created,
+      };
+      const outOfDateFolderIndex = this.state.folders.findIndex(
+        (folder) => folder.id === Number(updatedFolder.id)
+      );
+      const folderList = [...this.state.folders];
+      folderList.splice(outOfDateFolderIndex, 1, updatedFolderObj);
+      console.log("folder to insert", updatedFolderObj);
+      this.setState({
+        folders: folderList,
+      });
+    },
+
+    updateNote: () => {},
 
     deleteNote: (noteId) => {
       this.setState({
@@ -108,6 +134,10 @@ class App extends Component {
                 <Route path="/add-note" component={NoteListNav} />
 
                 <Route path="/add-folder" component={NoteListNav} />
+
+                <Route path="/edit/folder/:folderid" component={NoteListNav} />
+
+                <Route path="/edit/note/:noteid" component={NoteListNav} />
               </nav>
               <main className="App__main">
                 <Route exact path="/" component={NoteListMain} />
@@ -134,6 +164,15 @@ class App extends Component {
                 </ErrorBoundary>
                 <ErrorBoundary>
                   <Route path="/add-note" component={AddNote} />
+                </ErrorBoundary>
+                <ErrorBoundary>
+                  <Route
+                    path="/edit/folder/:folderid"
+                    component={UpdateFolder}
+                  />
+                </ErrorBoundary>
+                <ErrorBoundary>
+                  <Route path="/edit/note/:noteid" component={UpdateNote} />
                 </ErrorBoundary>
               </main>
             </div>

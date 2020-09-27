@@ -1,5 +1,5 @@
 import React from "react";
-import { NavLink } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 
 import Context from "../Context";
 import DeleteButton from "../DeleteButton/DeleteButton";
@@ -22,12 +22,13 @@ export default class NoteListNav extends React.Component {
                 folder={{ ...folder }}
                 history={this.props.history}
               />
+              <Link to={`/edit/folder/${folder.id}`}>Edit Folder</Link>
             </div>
           );
         })}
-        <NavLink className="link" to="/add-folder">
+        <Link className="link" to="/add-folder">
           <button>Add folder</button>
-        </NavLink>
+        </Link>
       </ul>
     );
   }
