@@ -9,7 +9,6 @@ export default class UpdateFolder extends Component {
   state = {
     id: null,
     title: "",
-    date_created: "",
     currentFolderTitle: "",
     touched: false,
   };
@@ -23,13 +22,6 @@ export default class UpdateFolder extends Component {
     }
   }
 
-  // getCurrentFolder = () => {
-  //   const { folderid } = this.props.match.params;
-  //   return this.context.folders.find(
-  //     (folder) => folder.id === Number(folderid)
-  //   );
-  // };
-
   changeFolder = (folderName) => {
     this.setState({
       title: folderName,
@@ -39,11 +31,10 @@ export default class UpdateFolder extends Component {
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const { id, title, date_created } = this.state;
+    const { id, title } = this.state;
     const newFolderObj = {
-      id,
+      id: Number(id),
       title,
-      date_created,
     };
 
     const patchOptions = {
@@ -63,6 +54,7 @@ export default class UpdateFolder extends Component {
         if (!res.ok) {
           throw new Error("Something went wrong, please try again later");
         }
+        console.log(newFolderObj);
         this.context.updateFolder(newFolderObj);
         this.props.history.push(`/folder/${newFolderObj.id}`);
       })
@@ -90,6 +82,7 @@ export default class UpdateFolder extends Component {
     fetch(`${config.API_URL}/api/folders/${folderid}`, options)
       .then((res) => res.json())
       .then((folder) => {
+        console.log(folder);
         return this.setState({
           ...folder,
           currentFolderTitle: folder.title,

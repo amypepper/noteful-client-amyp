@@ -88,6 +88,7 @@ export default class UpdateNote extends Component {
         if (!res.ok) {
           throw new Error("Something went wrong, please try again later");
         }
+        console.log(newNoteObj);
         this.context.updateNote(newNoteObj);
         this.props.history.push(`/note/${newNoteObj.id}`);
       })

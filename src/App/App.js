@@ -43,24 +43,11 @@ class App extends Component {
     },
 
     updateFolder: (updatedFolder) => {
-      console.log("new folder: ", updatedFolder);
-
-      const outOfDateFolder = this.state.folders.find(
-        (folder) => folder.id === Number(updatedFolder.id)
+      const newFolders = this.state.folders.map((folder) =>
+        folder.id === Number(updatedFolder.id) ? updatedFolder : folder
       );
-      const updatedFolderObj = {
-        id: outOfDateFolder.id,
-        title: updatedFolder.title,
-        date_created: outOfDateFolder.date_created,
-      };
-      const outOfDateFolderIndex = this.state.folders.findIndex(
-        (folder) => folder.id === Number(updatedFolder.id)
-      );
-      const folderList = [...this.state.folders];
-      folderList.splice(outOfDateFolderIndex, 1, updatedFolderObj);
-      console.log("folder to insert", updatedFolderObj);
       this.setState({
-        folders: folderList,
+        folders: newFolders,
       });
     },
 
