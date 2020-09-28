@@ -12,8 +12,6 @@ export default class UpdateNote extends Component {
     content: "",
     modified: "",
     folder_id: null,
-    currentFolderId: null,
-    currentFolderTitle: "",
     touched: false,
   };
 
@@ -25,15 +23,6 @@ export default class UpdateNote extends Component {
       return "Name must be at least 3 characters long";
     }
   }
-
-  getCurrentFolderTitle = () => {
-    const currentFolder = this.context.folders.find(
-      (folder) => folder.id === this.state.currentFolderId
-    );
-    if (currentFolder) {
-      return currentFolder.title;
-    }
-  };
 
   changeNoteName = (noteName) => {
     this.setState({
@@ -49,16 +38,19 @@ export default class UpdateNote extends Component {
     });
   };
 
-  changeNoteFolder = (noteFolderTitle) => {
-    const newNoteFolder = this.context.folders.find(
-      (folder) => folder.title === noteFolderTitle
+  changeNoteFolder = (newNoteFolder) => {
+    this.setState({
+      folder_id: newNoteFolder.id,
+    });
+  };
+
+  getCurrentFolderById = () => {
+    const getCurrentFolder = this.context.folders.find(
+      (folder) => folder.id === this.state.folder_id
     );
-    if (newNoteFolder) {
-      return this.setState({
-        folder_id: newNoteFolder.id,
-      });
+    if (getCurrentFolder) {
+      return getCurrentFolder.title;
     }
-    return null;
   };
 
   handleSubmit = (e) => {
@@ -88,7 +80,6 @@ export default class UpdateNote extends Component {
         if (!res.ok) {
           throw new Error("Something went wrong, please try again later");
         }
-        console.log(newNoteObj);
         this.context.updateNote(newNoteObj);
         this.props.history.push(`/note/${newNoteObj.id}`);
       })
@@ -118,7 +109,6 @@ export default class UpdateNote extends Component {
       .then((note) => {
         return this.setState({
           ...note,
-          currentFolderId: note.folder_id,
         });
       })
       .catch((error) =>
@@ -151,18 +141,22 @@ export default class UpdateNote extends Component {
             onChange={(e) => this.changeNoteContent(e.target.value)}
           />
 
-          <div>{`Current Folder: ${this.getCurrentFolderTitle()}`}</div>
-
           <label htmlFor="update-note-folder">Updated Folder</label>
           <select
             name="update-note-folder"
             id="update-note-folder"
-            value={this.state.newFolderTitle}
+            // select's value attr. is what actually gets sent to changeNoteFolder
+            // select's value is changed every time an <option> is clicked
+            value={this.state.folder_id}
             onChange={(e) => this.changeNoteFolder(e.target.value)}
           >
-            <option value={this.state.currentFolderId} />
+            <option value={this.state.folder_id}>
+              {this.getCurrentFolderById()}
+            </option>
             {this.context.folders.map((folder, i) => (
-              <option key={i} value={folder.title}>
+              // option's `value` attr. represents what is actually sent to <select>'s value attr.
+              // doesn't change what users see
+              <option key={i} value={folder.id}>
                 {folder.title}
               </option>
             ))}
