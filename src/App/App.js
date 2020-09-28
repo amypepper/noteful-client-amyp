@@ -64,7 +64,14 @@ class App extends Component {
       });
     },
 
-    updateNote: () => {},
+    updateNote: (updatedNote) => {
+      const newNotes = this.state.notes.map((note) =>
+        note.id === updatedNote.id ? updatedNote : note
+      );
+      this.setState({
+        notes: newNotes,
+      });
+    },
 
     deleteNote: (noteId) => {
       this.setState({

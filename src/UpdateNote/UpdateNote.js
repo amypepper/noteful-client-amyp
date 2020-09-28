@@ -12,33 +12,28 @@ export default class UpdateNote extends Component {
     content: "",
     modified: "",
     folder_id: null,
-    folderTitle: "",
+    currentFolderId: null,
+    currentFolderTitle: "",
     touched: false,
   };
 
-  //   validateNoteName() {
-  //     const noteName = this.state.note.title.trim();
-  //     if (noteName.length === 0) {
-  //       return "Name is required";
-  //     } else if (noteName.length < 3) {
-  //       return "Name must be at least 3 characters long";
-  //     }
-  //   }
+  validateNoteName() {
+    const noteName = this.state.title.trim();
+    if (noteName.length === 0) {
+      return "Name is required";
+    } else if (noteName.length < 3) {
+      return "Name must be at least 3 characters long";
+    }
+  }
 
-  getCurrentFolder = () => {
-    const folderId = this.state.folder_id;
-    return this.context.folders.find((folder) => folder.id === folderId);
+  getCurrentFolderTitle = () => {
+    const currentFolder = this.context.folders.find(
+      (folder) => folder.id === this.state.currentFolderId
+    );
+    if (currentFolder) {
+      return currentFolder.title;
+    }
   };
-
-  //   setCurrentFolderTitle = () => {
-  //       const folderObj = this.getCurrentFolder();
-  //       if (folderObj) {
-  //           this.setState({folderTitle: folderObj.title})
-  //       } else {
-  //           return ""
-  //       }
-
-  //   }
 
   changeNoteName = (noteName) => {
     this.setState({
@@ -55,47 +50,53 @@ export default class UpdateNote extends Component {
   };
 
   changeNoteFolder = (noteFolderTitle) => {
-    this.setState({
-      folder: "blank",
-    });
+    const newNoteFolder = this.context.folders.find(
+      (folder) => folder.title === noteFolderTitle
+    );
+    if (newNoteFolder) {
+      return this.setState({
+        folder_id: newNoteFolder.id,
+      });
+    }
+    return null;
   };
 
-  //   handleSubmit = (e) => {
-  //     e.preventDefault();
-  //     const { note } = this.state;
-  //     const newNoteObj = {
-  //       title: note.title,
-  //     };
+  handleSubmit = (e) => {
+    e.preventDefault();
+    const { id, title, content, folder_id } = this.state;
+    const newNoteObj = {
+      id,
+      title,
+      modified: Date.now().toString(),
+      content,
+      folder_id,
+    };
+    const patchOptions = {
+      method: "PATCH",
+      headers: {
+        "content-type": "application/json",
+        Authorization: `Bearer ${config.API_KEY}`,
+      },
+      body: JSON.stringify(newNoteObj),
+    };
 
-  // const patchOptions = {
-  //   method: "PATCH",
-  //   headers: {
-  //     "content-type": "application/json",
-  //     Authorization: `Bearer ${config.API_KEY}`,
-  //   },
-  //   body: JSON.stringify(newNoteObj),
-  // };
-
-  //     fetch(
-  //       `${config.API_URL}/api/notes/${this.props.match.params.noteid}`,
-  //       patchOptions
-  //     )
-  //       .then((res) => {
-  //         if (!res.ok) {
-  //           throw new Error("Something went wrong, please try again later");
-  //         }
-  //         return res.json();
-  //       })
-  //       .then((note) => {
-  //         this.context.updateNote(note);
-  //         this.props.history.push(`/note/${note.id}`);
-  //       })
-  //       .catch((err) => {
-  //         this.setState({
-  //           error: err.message,
-  //         });
-  //       });
-  //   };
+    fetch(
+      `${config.API_URL}/api/notes/${this.props.match.params.noteid}`,
+      patchOptions
+    )
+      .then((res) => {
+        if (!res.ok) {
+          throw new Error("Something went wrong, please try again later");
+        }
+        this.context.updateNote(newNoteObj);
+        this.props.history.push(`/note/${newNoteObj.id}`);
+      })
+      .catch((err) => {
+        this.setState({
+          error: err.message,
+        });
+      });
+  };
 
   clearValues = () => {
     this.setState({
@@ -113,9 +114,15 @@ export default class UpdateNote extends Component {
     };
     fetch(`${config.API_URL}/api/notes/${noteid}`, options)
       .then((res) => res.json())
-      .then((note) =>
-        this.setState({
+      .then((note) => {
+        return this.setState({
           ...note,
+          currentFolderId: note.folder_id,
+        });
+      })
+      .catch((error) =>
+        this.setState({
+          error: error.message,
         })
       );
   }
@@ -143,13 +150,16 @@ export default class UpdateNote extends Component {
             onChange={(e) => this.changeNoteContent(e.target.value)}
           />
 
-          <label htmlFor="update-note-folder">Folder</label>
+          <div>{`Current Folder: ${this.getCurrentFolderTitle()}`}</div>
+
+          <label htmlFor="update-note-folder">Updated Folder</label>
           <select
             name="update-note-folder"
             id="update-note-folder"
-            value={this.state.folderTitle}
+            value={this.state.newFolderTitle}
             onChange={(e) => this.changeNoteFolder(e.target.value)}
           >
+            <option value={this.state.currentFolderId} />
             {this.context.folders.map((folder, i) => (
               <option key={i} value={folder.title}>
                 {folder.title}
@@ -157,15 +167,15 @@ export default class UpdateNote extends Component {
             ))}
           </select>
 
-          {/* {this.state.note.touched && (
+          {this.state.touched && (
             <ValidationError message={this.validateNoteName()} />
-          )} */}
+          )}
         </fieldset>
         <fieldset className="button__group">
           <button
             type="submit"
             className="button"
-            // disabled={this.validateNoteName()}
+            disabled={this.validateNoteName()}
           >
             Save
           </button>

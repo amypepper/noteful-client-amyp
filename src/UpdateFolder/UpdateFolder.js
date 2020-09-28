@@ -7,14 +7,15 @@ export default class UpdateFolder extends Component {
   static contextType = Context;
 
   state = {
-    folder: {
-      title: "",
-      touched: false,
-    },
+    id: null,
+    title: "",
+    date_created: "",
+    currentFolderTitle: "",
+    touched: false,
   };
 
   validateFolderName() {
-    const folderName = this.state.folder.title.trim();
+    const folderName = this.state.title.trim();
     if (folderName.length === 0) {
       return "Name is required";
     } else if (folderName.length < 3) {
@@ -22,27 +23,27 @@ export default class UpdateFolder extends Component {
     }
   }
 
-  getCurrentFolder = () => {
-    const { folderid } = this.props.match.params;
-    return this.context.folders.find(
-      (folder) => folder.id === Number(folderid)
-    );
-  };
+  // getCurrentFolder = () => {
+  //   const { folderid } = this.props.match.params;
+  //   return this.context.folders.find(
+  //     (folder) => folder.id === Number(folderid)
+  //   );
+  // };
 
   changeFolder = (folderName) => {
     this.setState({
-      folder: {
-        title: folderName,
-        touched: true,
-      },
+      title: folderName,
+      touched: true,
     });
   };
 
   handleSubmit = (e) => {
     e.preventDefault();
-    const { folder } = this.state;
+    const { id, title, date_created } = this.state;
     const newFolderObj = {
-      title: folder.title,
+      id,
+      title,
+      date_created,
     };
 
     const patchOptions = {
@@ -62,11 +63,8 @@ export default class UpdateFolder extends Component {
         if (!res.ok) {
           throw new Error("Something went wrong, please try again later");
         }
-        return res.json();
-      })
-      .then((folder) => {
-        this.context.updateFolder(folder);
-        this.props.history.push(`/folder/${folder.id}`);
+        this.context.updateFolder(newFolderObj);
+        this.props.history.push(`/folder/${newFolderObj.id}`);
       })
       .catch((err) => {
         this.setState({
@@ -81,9 +79,30 @@ export default class UpdateFolder extends Component {
     });
   };
 
-  render() {
-    const currentFolder = this.getCurrentFolder();
+  componentDidMount() {
+    const { folderid } = this.props.match.params;
+    const options = {
+      headers: {
+        Authorization: `Bearer ${config.API_KEY}`,
+        Accept: "application/json",
+      },
+    };
+    fetch(`${config.API_URL}/api/folders/${folderid}`, options)
+      .then((res) => res.json())
+      .then((folder) => {
+        return this.setState({
+          ...folder,
+          currentFolderTitle: folder.title,
+        });
+      })
+      .catch((error) =>
+        this.setState({
+          error: error.message,
+        })
+      );
+  }
 
+  render() {
     return (
       <form
         className="update-folder-form"
@@ -92,7 +111,7 @@ export default class UpdateFolder extends Component {
         <fieldset>
           <legend>
             Current Folder Name:
-            {currentFolder && currentFolder.title}
+            {this.state.currentFolderTitle}
           </legend>
 
           <label htmlFor="update-folder">New Folder Name</label>
@@ -100,11 +119,12 @@ export default class UpdateFolder extends Component {
             type="text"
             name="update-folder"
             id="update-folder"
-            value={this.state.folder.title}
+            placeholder="New folder name"
+            value={this.state.title}
             onChange={(e) => this.changeFolder(e.target.value)}
           />
 
-          {this.state.folder.touched && (
+          {this.state.touched && (
             <ValidationError message={this.validateFolderName()} />
           )}
         </fieldset>
